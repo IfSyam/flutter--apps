@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_apps/components/card.dart';
+import 'package:flutter_apps/screens/calculator_screen.dart';
+import 'package:flutter_apps/screens/pin_enter_screen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -26,16 +28,32 @@ class MainScreen extends StatelessWidget {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
-              const BuildCard(
+              BuildCard(
                 title: "Calculator",
                 iconData: Icons.calculate_rounded,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CalculatorScreen(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(
                 height: 20,
               ),
-              const BuildCard(
+              BuildCard(
                 title: "Pin Enter",
                 iconData: Icons.pin,
+                onTap: () {
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PinEnterScreen(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
