@@ -43,7 +43,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: const Text("Apps Calculator"),
       ),
-      backgroundColor: Colors.white38,
+      backgroundColor: Colors.blueGrey,
       body: Column(
         children: [
           Expanded(
@@ -155,8 +155,12 @@ class _MainScreenState extends State<MainScreen> {
                       });
                     },
                     buttonText: buttons[index],
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
+                    color: isOperator(buttons[index])
+                        ? Colors.blueAccent
+                        : Colors.white,
+                    textColor: isOperator(buttons[index])
+                        ? Colors.white
+                        : Colors.black,
                   );
                 }
               },
@@ -165,6 +169,13 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  bool isOperator(String x) {
+    if (x == '/' || x == 'x' || x == '-' || x == '+' || x == '=') {
+      return true;
+    }
+    return false;
   }
 
   // function to calculate the input operation
