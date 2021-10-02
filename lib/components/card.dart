@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 class BuildCard extends StatelessWidget {
   final String title;
   final IconData iconData;
+  final VoidCallback onTap;
 
   const BuildCard({
     Key? key,
     required this.title,
     required this.iconData,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      selectedTileColor: Colors.blueGrey,
       tileColor: Colors.blueAccent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -40,7 +41,7 @@ class BuildCard extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }
