@@ -13,6 +13,8 @@ class PinEnterScreen extends StatefulWidget {
 
 class _PinEnterScreenState extends State<PinEnterScreen> {
   String userInput = '';
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +42,7 @@ class _PinEnterScreenState extends State<PinEnterScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: PinCodeTextField(
+                      controller: _controller,
                       appContext: context,
                       keyboardType: TextInputType.none,
                       inputFormatters: [
@@ -66,6 +69,9 @@ class _PinEnterScreenState extends State<PinEnterScreen> {
                       ),
                       onChanged: (value) {
                         debugPrint(value);
+                      },
+                      onCompleted: (value) {
+                        if (value == '123456') Navigator.pop(context);
                       },
                     ),
                   ),
@@ -121,16 +127,28 @@ class _PinEnterScreenState extends State<PinEnterScreen> {
         );
       case 11:
         return buttonPin(
-            index: _index,
-            number: 0,
-            color: color,
-            onTap: () {
-              debugPrint('0');
-            });
+          index: _index,
+          number: 0,
+          color: color,
+          onTap: (_controller.text.length < 6)
+              ? () {
+                  setState(() {
+                    _controller.text += "0";
+                  });
+                }
+              : () {},
+        );
       case 12:
         return buttonPin(
           index: _index,
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              _controller.text = _controller.text.substring(
+                0,
+                (_controller.text.isEmpty) ? 0 : _controller.text.length - 1,
+              );
+            });
+          },
           pinButtonType: PinButtonType.icon,
           icon: Icon(
             Icons.backspace_outlined,
@@ -141,7 +159,13 @@ class _PinEnterScreenState extends State<PinEnterScreen> {
       default:
         return buttonPin(
           index: _index,
-          onTap: () {},
+          onTap: (_controller.text.length < 6)
+              ? () {
+                  setState(() {
+                    _controller.text += _index.toString();
+                  });
+                }
+              : () {},
           color: color,
         );
     }
