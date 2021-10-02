@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/components/button.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -9,6 +10,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  var userInput = '';
+  var answer = '';
+
   // Array of button
   final List<String> buttons = [
     'C',
@@ -49,17 +53,17 @@ class _MainScreenState extends State<MainScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   alignment: Alignment.centerRight,
-                  child: const Text(
-                    '0',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  child: Text(
+                    userInput,
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(15),
                   alignment: Alignment.centerRight,
-                  child: const Text(
-                    '0',
-                    style: TextStyle(
+                  child: Text(
+                    answer,
+                    style: const TextStyle(
                       fontSize: 30,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -79,7 +83,12 @@ class _MainScreenState extends State<MainScreen> {
                 // Clear Button
                 if (index == 0) {
                   return MyButton(
-                    buttontapped: () {},
+                    buttontapped: () {
+                      setState(() {
+                        userInput = '';
+                        answer = '0';
+                      });
+                    },
                     buttonText: buttons[index],
                     color: Colors.blue[50],
                     textColor: Colors.black,
@@ -97,7 +106,11 @@ class _MainScreenState extends State<MainScreen> {
                 // % Button
                 else if (index == 2) {
                   return MyButton(
-                    buttontapped: () {},
+                    buttontapped: () {
+                      setState(() {
+                        userInput += buttons[index];
+                      });
+                    },
                     buttonText: buttons[index],
                     color: Colors.blue[50],
                     textColor: Colors.black,
@@ -106,7 +119,14 @@ class _MainScreenState extends State<MainScreen> {
                 // Delete Button
                 else if (index == 3) {
                   return MyButton(
-                    buttontapped: () {},
+                    buttontapped: (userInput.isNotEmpty)
+                        ? () {
+                            setState(() {
+                              userInput =
+                                  userInput.substring(0, userInput.length - 1);
+                            });
+                          }
+                        : () {},
                     buttonText: buttons[index],
                     color: Colors.blue[50],
                     textColor: Colors.black,
@@ -115,7 +135,11 @@ class _MainScreenState extends State<MainScreen> {
                 // Equal_to Button
                 else if (index == 18) {
                   return MyButton(
-                    buttontapped: () {},
+                    buttontapped: () {
+                      setState(() {
+                        equalPressed();
+                      });
+                    },
                     buttonText: buttons[index],
                     color: Colors.orange[700],
                     textColor: Colors.white,
@@ -125,7 +149,11 @@ class _MainScreenState extends State<MainScreen> {
                 //  other buttons
                 else {
                   return MyButton(
-                    buttontapped: () {},
+                    buttontapped: () {
+                      setState(() {
+                        userInput += buttons[index];
+                      });
+                    },
                     buttonText: buttons[index],
                     color: Colors.blueAccent,
                     textColor: Colors.white,
@@ -137,5 +165,17 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  // function to calculate the input operation
+  void equalPressed() {
+    String finaluserinput = userInput;
+    finaluserinput = userInput.replaceAll('x', '*');
+
+    Parser p = Parser();
+    Expression exp = p.parse(finaluserinput);
+    ContextModel cm = ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+    answer = eval.toString();
   }
 }
